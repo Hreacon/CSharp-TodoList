@@ -1,7 +1,7 @@
 using Nancy;
 using ToDoListNS.Objects;
 using System.Collections.Generic;
-using System.Windows;
+using System;
 
 namespace ToDoListNS
 {
@@ -34,6 +34,12 @@ namespace ToDoListNS
         int catId = t.GetCategoryId();
         Task.Delete(int.Parse(x.id));
         return View["forward.cshtml", "/cat/"+catId];
+      };
+      Get["/cat/{id}/delete"] = x => {
+        int id = int.Parse(x.id);
+        Console.WriteLine("Deleting Category: " + id);
+        Category.Delete(int.Parse(x.id));
+        return View["forward.cshtml", "/"];
       };
       Post["/cat/{id}/addTask"] = x => {
         int catId = int.Parse(x.id);

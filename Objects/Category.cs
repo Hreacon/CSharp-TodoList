@@ -99,6 +99,18 @@ namespace ToDoListNS.Objects
       Category.DatabaseCleanup(rdr, _conn);
       return output;
     }
+    public static void Delete(int id)
+    {
+      // make sure to delete tasks first, otherwise cause sql error
+      List<Task> tasks = Category.Find(id).GetTasks();
+      foreach(Task task in tasks)
+      {
+        Task.Delete(task.GetId());
+      }
+      string query = "DELETE FROM "+Category.Table+" WHERE id = @id";
+      SqlDataReader rdr = Category.DatabaseOperation(query, new List<SqlParameter> { new SqlParameter("@id", id)});
+      Category.DatabaseCleanup(rdr, _conn);
+    }
     public static void DeleteAll()
     {
       string query = "DELETE FROM "+Category.Table+"";
