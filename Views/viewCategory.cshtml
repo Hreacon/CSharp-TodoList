@@ -1,0 +1,18 @@
+@Html.Partial("header.cshtml")
+
+<h1>@Model.GetName()</h1>
+
+<ul>
+  @foreach(var item in @Model.GetTasks())
+  {
+    <li><input type="checkbox" name="check" value="@item.GetId()"><label for="check">@item.GetDescription()</label></li>
+  }
+</ul>
+
+<form action="/cat/@Model.GetId()/addTask" method="post">
+  <label for="description">Add Task:</label>
+  <input type="text" name="description">
+  <input type="submit" value="Add Task">
+</form>
+
+<a href="/" class="link">Go Home</a>

@@ -1,0 +1,19 @@
+@Html.Partial("header.cshtml")
+
+<h1>Categories:</h1>
+<ul>
+  @if(Model.Count > 0) 
+  {
+    @foreach( var item in Model )
+    {
+      <li><a href="/cat/@item.GetId()">@item.GetName()</a></li>
+    }
+  } else {
+    <li>No Categories added yet, please add one below</li>
+  }
+</ul>
+
+<form action="/addCategory" method="post">
+  <label for="name">Category Name:</label><input type="text" name="name" autofocus>
+  <input type="submit" name="submit" value="Add Category">
+</form>
