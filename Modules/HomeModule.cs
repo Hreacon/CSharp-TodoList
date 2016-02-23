@@ -14,6 +14,12 @@ namespace ToDoListNS
         
         return View["viewCategory.cshtml", Category.Find(int.Parse(x.id))];
       };
+      Post["/cat/{id}/addTask"] = x => {
+        int catId = int.Parse(x.id);
+        Task task = new Task(Request.Form["description"], catId);
+        task.Save();
+        return View["viewCategory.cshtml", Category.Find(catId)];
+      };
       Post["/addCategory"] = _ => {
         string name = Request.Form["name"];
         Category cat = new Category(name);
