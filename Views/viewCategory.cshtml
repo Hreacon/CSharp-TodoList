@@ -6,13 +6,14 @@
   @foreach(var item in @Model.GetTasks())
   {
     <li class="task"><input type="checkbox" name="check" id="@item.GetId()check" value="@item.GetId()" @if(item.GetChecked() > 0) { @Html.Raw("checked") }
-    ><label for="@item.GetId()check">@item.GetDescription() @if(item.GetChecked() > 0) { <a href='/delete/@item.GetId()'>Delete Checked Item</a> }</label></li>
+    ><label for="@item.GetId()check">@item.GetDescription() @if(item.GetChecked() > 0) { <a href='/delete/@item.GetId()'>Delete Checked Item</a> } else { @item.GetDueDate() }</label></li>
   }
 </ul>
 
 <form action="/cat/@Model.GetId()/addTask" method="post">
   <label for="description">Add Task:</label>
   <input type="text" name="description" autofocus>
+  <input type="datetime-local" name="duedate">
   <input type="submit" value="Add Task">
 </form>
 

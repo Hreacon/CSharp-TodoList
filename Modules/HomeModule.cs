@@ -43,7 +43,8 @@ namespace ToDoListNS
       };
       Post["/cat/{id}/addTask"] = x => {
         int catId = int.Parse(x.id);
-        Task task = new Task(Request.Form["description"], catId);
+        DateTime duedate = Request.Form["duedate"];
+        Task task = new Task(Request.Form["description"], catId, duedate);
         task.Save();
         return View["forward.cshtml", "/cat/"+catId];
       };
