@@ -5,7 +5,9 @@
 <ul>
   @foreach(var item in @Model.GetTasks())
   {
-    <li><input type="checkbox" name="check" value="@item.GetId()"><label for="check">@item.GetDescription()</label></li>
+    <li class="task"><input type="checkbox" name="check" id="check" value="@item.GetId()"
+    @if(@item.GetChecked() > 0) { @Html.Raw("checked") }
+    ><label for="check">@item.GetDescription()</label></li>
   }
 </ul>
 

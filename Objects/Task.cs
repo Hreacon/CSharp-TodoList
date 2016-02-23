@@ -10,9 +10,11 @@ namespace ToDoListNS.Objects
     private string _description;
     private int _id;
     private int _category_id;
+    private int _checked;
     public static string Table = "tasks";
     private static string DescriptionColumn = "description";
     private static string CategoryIdColumn = "category_id";
+    private static string CheckedColumn = "checked";
     private static SqlConnection _conn;
     
     public Task(string description, int category_id, int id = 0)
@@ -20,21 +22,33 @@ namespace ToDoListNS.Objects
       _description = description;
       _category_id = category_id;
       _id = id;
+      _checked = 0;
     }
     
     public string GetDescription() { return _description; }
     public int GetId() { return _id; }
     public void SetDescription(string description) { _description = description; }
     public int GetCategoryId() { return _category_id; }
+    public int GetChecked() { return _checked; }
+    public void SetChecked(int checkedIn) { _checked = checkedIn; }
     
     public void Save()
     {
-      string query = "INSERT INTO "+Task.Table+" ("+Task.DescriptionColumn+", " + Task.CategoryIdColumn + ") OUTPUT INSERTED.id values (@Description, @categoryId);";
-      SqlDataReader rdr = Task.DatabaseOperation(query, new List<SqlParameter> { 
+      string query = "";
+      List<SqlParameter> queryparams = new List<SqlParameter> { 
         new SqlParameter("@Description", GetDescription()),
-        new SqlParameter("@categoryId", GetCategoryId()) });
+        new SqlParameter("@checked", GetChecked()) };
+      Console.WriteLine("Saving id of " + _id);
+      if(_id > 0) // already exists in database, update table
+      {
+        query = "UPDATE " + Task.Table + " SET " + Task.DescriptionColumn + "=@Description, " + Task.CheckedColumn + "=@checked WHERE id = " + GetId();
+      } else { // doesnt exist in databaes, insert
+        query = "INSERT INTO "+Task.Table+" ("+Task.DescriptionColumn+", " + Task.CategoryIdColumn + ", " + Task.CheckedColumn + ") OUTPUT INSERTED.id values (@Description, @categoryId, @Checked);";
+        queryparams.Add(new SqlParameter("@categoryId", GetCategoryId()));
+      }
+      SqlDataReader rdr = Task.DatabaseOperation(query, queryparams);
       
-      while(rdr.Read())
+      while(rdr.Read() && _id == 0)
       {
         this._id = rdr.GetInt32(0);
       }
@@ -80,7 +94,8 @@ namespace ToDoListNS.Objects
       Task output = new Task("", 0);
       while(rdr.Read())
       {
-        output = new Task(rdr.GetString(1), rdr.GetInt32(0));
+        output = new Task(rdr.GetString(1), rdr.GetInt32(2), rdr.GetInt32(0));
+        output.SetChecked(rdr.GetInt32(3));
       }
       if(rdr != null)
       {

@@ -3,13 +3,13 @@ form {
   margin:auto;
 }
 
-label, input {
+label, input[type=text] {
   display: inline-block;
 }
 label {
   width:29%;
 }
-input {
+input[type=text] {
   width:70%;
 }
 [type=submit] {
@@ -31,4 +31,13 @@ input {
 .link:hover {
   color:white;
   background: black;
+}
+
+.task input {
+  width:10%;
+}
+.task label {
+  padding:10px;
+  display: inline-block;
+  cursor:pointer;
 }
