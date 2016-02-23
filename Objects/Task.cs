@@ -94,8 +94,13 @@ namespace ToDoListNS.Objects
       Task output = new Task("", 0);
       while(rdr.Read())
       {
-        output = new Task(rdr.GetString(1), rdr.GetInt32(2), rdr.GetInt32(0));
-        output.SetChecked(rdr.GetInt32(3));
+        int id = rdr.GetInt32(0);
+        string descr = rdr.GetString(1);
+        int category_id =  rdr.GetInt32(2);
+        int checkedInt = rdr.GetInt32(3);
+        Console.WriteLine("Loading Task: ID: " + id + " desc: " + descr + " catId " + category_id + " checked " + checkedInt);
+        output = new Task(descr, category_id, id);
+        output.SetChecked(checkedInt);
       }
       if(rdr != null)
       {
@@ -127,6 +132,19 @@ namespace ToDoListNS.Objects
       }
       return output;
     }
+    public static void Delete(int id)
+    {
+      string query = "DELETE FROM " + Task.Table + " WHERE id = @id";
+      SqlDataReader rdr = Task.DatabaseOperation(query, new List<SqlParameter> { new SqlParameter("@id", id)});
+      if(rdr != null)
+      {
+        rdr.Close();
+      }
+      if(_conn != null)
+      {
+        _conn.Close();
+      }
+    }
     public static void DeleteAll()
     {
       string query = "DELETE FROM "+Task.Table+"";
@@ -157,5 +175,6 @@ namespace ToDoListNS.Objects
       
       return rdr;
     }
+    
   } // end class
 } // end namespace

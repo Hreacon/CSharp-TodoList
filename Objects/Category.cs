@@ -55,7 +55,10 @@ namespace ToDoListNS.Objects
       List<Task> output = new List<Task>(){};
       while(rdr.Read())
       {
-        output.Add(new Task(rdr.GetString(1), rdr.GetInt32(0)));
+        Task t = new Task(rdr.GetString(1), rdr.GetInt32(2), rdr.GetInt32(0));
+        t.SetChecked(rdr.GetInt32(3));
+        output.Add(t);
+        
       }
       return output;
     }

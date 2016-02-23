@@ -6,7 +6,7 @@ form {
 label, input[type=text] {
   display: inline-block;
 }
-label {
+form > label {
   width:29%;
 }
 input[type=text] {
@@ -40,4 +40,13 @@ input[type=text] {
   padding:10px;
   display: inline-block;
   cursor:pointer;
+  width:50%;
+  border:1px solid black;
+}
+.task a {
+  text-align: right;
+  display: inline-block;
+  padding:10px;
+  border:1px solid red;
+  margin-left:30%;
 }

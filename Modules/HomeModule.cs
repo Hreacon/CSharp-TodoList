@@ -1,6 +1,8 @@
 using Nancy;
 using ToDoListNS.Objects;
 using System.Collections.Generic;
+using System.Windows;
+
 namespace ToDoListNS
 {
   public class HomeModule : NancyModule
@@ -18,25 +20,32 @@ namespace ToDoListNS
         Task task = Task.Find(int.Parse(x.id));
         task.SetChecked(1);
         task.Save();
-        return View["viewCategory.cshtml", Category.Find(task.GetCategoryId())];
+        return View["forward.cshtml", "/cat/"+task.GetCategoryId()];
       };
       Get["/uncheck/{id}"] = x => {
         Task task = Task.Find(int.Parse(x.id));
         task.SetChecked(0);
         task.Save();
-        return View["viewCategory.cshtml", Category.Find(task.GetCategoryId())];
+        
+        return View["forward.cshtml", "/cat/"+task.GetCategoryId()];
+      };
+      Get["/delete/{id}"] = x => {
+        Task t = Task.Find(int.Parse(x.id));
+        int catId = t.GetCategoryId();
+        Task.Delete(int.Parse(x.id));
+        return View["forward.cshtml", "/cat/"+catId];
       };
       Post["/cat/{id}/addTask"] = x => {
         int catId = int.Parse(x.id);
         Task task = new Task(Request.Form["description"], catId);
         task.Save();
-        return View["viewCategory.cshtml", Category.Find(catId)];
+        return View["forward.cshtml", "/cat/"+catId];
       };
       Post["/addCategory"] = _ => {
         string name = Request.Form["name"];
         Category cat = new Category(name);
         cat.Save();
-        return View["ViewCategories.cshtml", Category.GetAll()];
+        return View["forward.cshtml", "/"];
       };
       
     }
