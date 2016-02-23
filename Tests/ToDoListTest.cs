@@ -7,15 +7,15 @@ using System.Data.SqlClient;
 
 namespace ToDoListNS
 {
-  public class ToDoListTest : IDisposable
+  public class TaskTest : IDisposable
   {
-     public ToDoListTest()
+     public TaskTest()
      {
        DBConfiguration.ConnectionString = "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=todo_test;Integrated Security=SSPI;";
      }
      public void Dispose()
      {
-       ToDoList.DeleteAll();
+       Task.DeleteAll();
      }
   }
 }
